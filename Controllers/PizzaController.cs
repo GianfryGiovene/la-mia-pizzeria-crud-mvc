@@ -61,20 +61,7 @@ namespace LaMiaPizzeria.Controllers
                 db.PizzaList.Add(p.Pizza);
                 db.SaveChanges();
                 return RedirectToAction("Index");
-            }
-            //return View("Index");
-            //if (!ModelState.IsValid)
-            //{
-            //    return View("Create", pizza);
-            //}
-            //using (PizzaContext db = new PizzaContext())
-            //{
-            //    db.PizzaList.Add(pizza);
-            //    db.SaveChanges();
-
-            //}          
-
-            //return RedirectToAction("Index");
+            }            
         }
 
         [HttpGet]
@@ -103,22 +90,28 @@ namespace LaMiaPizzeria.Controllers
                 }
                 else
                 {
-                    return View(pizza);
+                    PizzaCategories model = new PizzaCategories();
+
+                    model.Pizza = pizza;
+                    model.CategoryList = db.CategoriaList.ToList();
+
+                    return View(model);
                 }
             }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update(int id, Pizza pizza)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(pizza);
-            }
-
+        public IActionResult Update(int id, PizzaCategories p)
+        {            
             using(PizzaContext db = new PizzaContext())
             {
+                if (!ModelState.IsValid)
+                {
+                    p.CategoryList = db.CategoriaList.ToList();
+                    return View(p);
+                }
+
                 Pizza editPizza = db.PizzaList.Where(p => p.Id == id).FirstOrDefault();
 
                 if(editPizza == null)
@@ -126,10 +119,11 @@ namespace LaMiaPizzeria.Controllers
                     return NotFound();
                 }
 
-                editPizza.Name = pizza.Name;
-                editPizza.Description = pizza.Description;
-                editPizza.Price = pizza.Price;
-                editPizza.PhotoUrl = pizza.PhotoUrl;
+                editPizza.Name = p.Pizza.Name;
+                editPizza.Description = p.Pizza.Description;
+                editPizza.Price = p.Pizza.Price;
+                editPizza.PhotoUrl = p.Pizza.PhotoUrl;
+                editPizza.CategoryId = p.Pizza.CategoryId;
 
                 db.SaveChanges();
 
