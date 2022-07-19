@@ -1,0 +1,14 @@
+﻿@{
+    List<string> info = new List<string> { "contatti", "dove trovarci", "info_allergeni", "provenienza dei nostri prodotti" };
+    
+}
+    <footer class="border-top pt-3">
+        <h6 class="text-center pb-3">Di seguito i link per togliervi ogni dubbio sulla qualità dei nostri prodotti! Occhio agli allergenii!!</h6>
+        <ul class="row col-12 list-unstyled text-center">
+            @foreach(string i in info)
+            {
+                <li class="col-3"><a href="">@i</a></li>        
+            }
+        </ul>
+        <div class="text-center">Made with &hearts;</div>
+    </footer>

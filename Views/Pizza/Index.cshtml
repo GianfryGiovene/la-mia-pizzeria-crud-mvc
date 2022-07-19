@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Lista Pizze";
+}
+
+@model List<Pizza>
+
+<div>
+    <div>
+        <a class="btn btn-primary" href="@Url.Action("Create","Pizza")">Crea Pizza</a>
+    </div>
+    <table  class="table table-hover">
+        <tr>
+            <th class="col-2">Immagine</th>
+            <th class="col-2">Nome</th>
+            <th class="col-2">Desscrizione</th>
+            <th class="col-2">Prezzo</th>
+            <th class="col-2">Dettaglio</th>
+        </tr>
+
+        @foreach(Pizza pizza in Model)
+        {
+            <tr class="my-lg-2 ">
+                <td class="align-middle l"><img src="@pizza.PhotoUrl" class="w-100 rounded-circle border-5 border border-success"/></td>
+                <td class="align-middle">@pizza.Name</td>
+                <td class="align-middle">@pizza.Description</td>
+                <td class="align-middle">@pizza.Price euro</td>
+                <td class="align-middle"><a class="btn btn-warning" href="@Url.Action("Details","Pizza",new { id = @pizza.Id})">Visualizza</a></td>
+             </tr>
+        }
+    </table>
+</div>
+
