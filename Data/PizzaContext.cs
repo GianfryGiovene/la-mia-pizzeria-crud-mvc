@@ -7,6 +7,7 @@ namespace LaMiaPizzeria.Data
     {
         public DbSet<Pizza> PizzaList { get; set; }
         public DbSet<Ingrediente> IngredienteList { get; set; }
+        public DbSet<Categoria> CategoriaList { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

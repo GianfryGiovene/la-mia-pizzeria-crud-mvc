@@ -13,8 +13,8 @@ namespace LaMiaPizzeria.Models
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Campo obbligatorio")]
-        [StringLength(100, ErrorMessage = "La lunghezza di {0} dev'essere compresa tra {2} e {1}.", MinimumLength = 5)]
-        [MoreThanFiveWordValidationAttribute]
+        //[StringLength(100, ErrorMessage = "La lunghezza di {0} dev'essere compresa tra {2} e {1}.", MinimumLength = 5)]
+        //[MoreThanFiveWordValidationAttribute]
         public string Description { get; set; }
 
         [Required(ErrorMessage = "Campo obbligatorio")]
@@ -24,6 +24,10 @@ namespace LaMiaPizzeria.Models
         [Required(ErrorMessage = "Jola")]
         [NegativePriceValidationAttribute]        
         public double Price { get; set; }
+
+        public int? CategoryId { get; set; }
+        public Categoria? Category { get; set; }
+
 
         public List<Ingrediente>? IngredienteList { get; set; }
 
