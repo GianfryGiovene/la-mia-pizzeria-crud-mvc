@@ -26,7 +26,7 @@ namespace LaMiaPizzeria.Models
         public double Price { get; set; }
 
         public int? CategoryId { get; set; }
-        public Categoria? Category { get; set; }
+        public Categoria? Category { set; get;  }
 
 
         public List<Ingrediente>? IngredienteList { get; set; }

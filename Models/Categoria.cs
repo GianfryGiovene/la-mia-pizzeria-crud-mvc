@@ -10,7 +10,7 @@ namespace LaMiaPizzeria.Models
         [Required]
         public string Name { get; set; }
         
-        public List<Pizza> PizzaList { get; set; }
+        public List<Pizza>? PizzaList { get; set; }
 
 
         public Categoria()

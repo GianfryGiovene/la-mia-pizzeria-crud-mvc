@@ -1,23 +1,27 @@
 ﻿using LaMiaPizzeria.Data;
 using LaMiaPizzeria.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Linq;
 
 namespace LaMiaPizzeria.Controllers
 {
     public class PizzaController : Controller
     {
+        [HttpGet]
         public IActionResult Index()
         {
             using (PizzaContext db = new PizzaContext())
             {
-                List<Pizza> pizzaList = db.PizzaList.OrderBy(pizza => pizza.Id).ToList<Pizza>();
+                IQueryable<Pizza> pizzaList = db.PizzaList.Include(p => p.Category);
+                //List<Pizza> pizzaList = db.PizzaList.OrderBy(pizza => pizza.Id).ToList<Pizza>();
 
-                if(pizzaList == null)
-                {
-                    return NotFound("Pizze non presenti");
-                }
-                return View(pizzaList);
+                //if(pizzaList == null)
+                //{
+                //    return NotFound("Pizze non presenti");
+                //}
+                return View("Index", pizzaList.ToList());
             }
         }
 
@@ -42,27 +46,48 @@ namespace LaMiaPizzeria.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Pizza pizza)
+        public IActionResult Create(PizzaCategories p)
         {
-            if (!ModelState.IsValid)
+            using(PizzaContext db = new PizzaContext())
             {
-                return View("Create", pizza);
-            }
-            using (PizzaContext db = new PizzaContext())
-            {
-                db.PizzaList.Add(pizza);
+                if (!ModelState.IsValid)
+                {
+                    p.CategoryList = db.CategoriaList.ToList();
+
+                    return View();
+                }
+
+                db.PizzaList.Add(p.Pizza);
                 db.SaveChanges();
-
+                return RedirectToAction("Index");
             }
-           
+            //return View("Index");
+            //if (!ModelState.IsValid)
+            //{
+            //    return View("Create", pizza);
+            //}
+            //using (PizzaContext db = new PizzaContext())
+            //{
+            //    db.PizzaList.Add(pizza);
+            //    db.SaveChanges();
 
-            return RedirectToAction("Index");
+            //}          
+
+            //return RedirectToAction("Index");
         }
 
         [HttpGet]
         public IActionResult Create()
         {
-            return View("Create");
+            using (PizzaContext db = new PizzaContext())
+            {
+                List<Categoria> categories = db.CategoriaList.ToList();
+                PizzaCategories model = new PizzaCategories();
+
+                model.CategoryList = categories;
+                model.Pizza = new Pizza();
+                return View(model);
+            }
         }
 
         [HttpGet]

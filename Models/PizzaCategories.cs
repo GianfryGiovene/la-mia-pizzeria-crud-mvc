@@ -1,10 +1,13 @@
-﻿namespace LaMiaPizzeria.Models
+﻿using LaMiaPizzeria.Data;
+
+namespace LaMiaPizzeria.Models
 {
     public class PizzaCategories
     {
-        public Pizza Pizza { get; set; }
-        public List<Categoria> CategoryList { get; set; }
+        public Pizza Pizza { set; get; }
+        public List<Categoria>? CategoryList { get; set; }
 
-    }
+       
+    }  
 }
 
