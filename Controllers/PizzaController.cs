@@ -29,7 +29,7 @@ namespace LaMiaPizzeria.Controllers
         {
             using (PizzaContext db = new PizzaContext())
             {  
-                Pizza pizza  = db.PizzaList.Where(pizza => pizza.Id == id).FirstOrDefault();
+                Pizza pizza  = db.PizzaList.Where(p => p.Id == id).Include(c => c.Category).FirstOrDefault();
 
                 if(pizza == null)
                 {
@@ -38,6 +38,7 @@ namespace LaMiaPizzeria.Controllers
                 else
                 {
                     db.Entry(pizza).Collection("IngredienteList").Load();
+                    
                     return View("Details", pizza);
                 }
                
