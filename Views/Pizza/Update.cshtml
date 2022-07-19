@@ -1,0 +1,40 @@
+﻿@model Pizza
+
+
+<div class="container">
+
+    <h2 class="text-center">Crea la nuova pizza</h2>
+
+    <form asp-controller="Pizza" asp-action="Update" asp-route-id="@Model.Id" method="post">
+        @Html.AntiForgeryToken()
+
+        <div class="mb-3">
+            <label for="name">Nome: </label>
+            <input id="name" asp-for="Name" class="d-block w-100" />            
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>      
+        
+        <div class="mb-3">
+            <label for="price">Prezzo: </label>
+            <input id="price" asp-for="Price" class="d-block w-100" />    
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label for="description">Descrizione: </label>
+            <textarea id="description" asp-for="Description" class="d-block w-100" ></textarea>  
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label for="urlphoto">Url foto: </label>
+            <input id="urlphoto" type="url" asp-for="PhotoUrl" class="d-block w-100" />      
+            <span asp-validation-for="PhotoUrl" class="text-danger"></span>
+        </div>
+
+        <div>
+            <button class=" btn btn-success" type="submit">Crea</button>
+        </div>
+    </form>
+
+</div>
