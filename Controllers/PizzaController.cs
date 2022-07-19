@@ -110,5 +110,27 @@ namespace LaMiaPizzeria.Controllers
                 return RedirectToAction("Index");
             }
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
+        {
+            using(PizzaContext db = new PizzaContext())
+            {
+                Pizza pizza = db.PizzaList.Where(p => p.Id == id).FirstOrDefault();
+
+                if(pizza == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    db.PizzaList.Remove(pizza);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+            }
+            
+        }
     }
 }
