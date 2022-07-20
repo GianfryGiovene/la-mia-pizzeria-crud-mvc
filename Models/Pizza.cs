@@ -21,9 +21,9 @@ namespace LaMiaPizzeria.Models
         [Url(ErrorMessage = "L'url inserito non è nel formato corretto")]
         public string PhotoUrl { get; set; }
 
-        [Required(ErrorMessage = "Jola")]
-        [NegativePriceValidationAttribute]        
-        public double Price { get; set; }
+        [Required(ErrorMessage = "Campo obbligatorio")]
+        [NegativePriceValidationAttribute]
+        public double price;
 
         public int? CategoryId { get; set; }
         public Categoria? Category { set; get;  }
@@ -31,13 +31,26 @@ namespace LaMiaPizzeria.Models
 
         public List<Ingrediente>? IngredienteList { get; set; }
 
+
+        public double Price
+        {
+            get
+            {
+                return price;
+            }
+            set
+            {
+                double roundedValue = Math.Round(value,2);
+                price = roundedValue;
+            }
+        }
         
         public Pizza(string name, string description, string photoUrl, double price)
         {
             Name = name;
             Description = description;
             PhotoUrl = photoUrl;
-            Price = price;
+            price = price;
         }
 
         public Pizza()
