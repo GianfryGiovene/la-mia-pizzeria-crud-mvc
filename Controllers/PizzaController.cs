@@ -9,21 +9,20 @@ namespace LaMiaPizzeria.Controllers
 {
     public class PizzaController : Controller
     {
+        //************* INDEX VIEW ***************
         [HttpGet]
         public IActionResult Index()
         {
             using (PizzaContext db = new PizzaContext())
             {
                 IQueryable<Pizza> pizzaList = db.PizzaList.Include(p => p.Category);
-                //List<Pizza> pizzaList = db.PizzaList.OrderBy(pizza => pizza.Id).ToList<Pizza>();
-
-                //if(pizzaList == null)
-                //{
-                //    return NotFound("Pizze non presenti");
-                //}
+                
                 return View("Index", pizzaList.ToList());
             }
         }
+
+
+        //************* DETAILS VIEW ***************
 
         public IActionResult Details(int id)
         {
@@ -45,6 +44,8 @@ namespace LaMiaPizzeria.Controllers
             }
 
         }
+
+        //************* POST CREATE VIEW ***************
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(PizzaCategories p)
@@ -64,6 +65,7 @@ namespace LaMiaPizzeria.Controllers
             }            
         }
 
+        //************* GET CREATE VIEW ***************
         [HttpGet]
         public IActionResult Create()
         {
@@ -78,6 +80,7 @@ namespace LaMiaPizzeria.Controllers
             }
         }
 
+        //************* GET UPDATE VIEW ***************
         [HttpGet]
         public IActionResult Update(int id)
         {
@@ -100,6 +103,7 @@ namespace LaMiaPizzeria.Controllers
             }
         }
 
+        //************* POST UPDATE VIEW ***************
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Update(int id, PizzaCategories p)
@@ -130,7 +134,7 @@ namespace LaMiaPizzeria.Controllers
                 return RedirectToAction("Index");
             }
         }
-
+        //************* DELETE VIEW ***************
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
