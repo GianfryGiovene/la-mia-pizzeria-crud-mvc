@@ -6,7 +6,7 @@ namespace LaMiaPizzeria.Models
     public class Ingrediente
     {
         [Key]
-        public int Id { get; set; }
+        public int Id { get; set; }        
         public string Name { get; set; }
         public List<Pizza>? PizzaList { get; set; }
 
@@ -15,5 +15,11 @@ namespace LaMiaPizzeria.Models
                         
         }
 
+        public Ingrediente(string name,int id )
+        {
+            Id = id;
+            Name = name;
+           
+        }
     }
 }

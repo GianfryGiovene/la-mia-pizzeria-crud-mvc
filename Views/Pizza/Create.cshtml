@@ -55,11 +55,23 @@
             </select>                        
             
         </div>
+        @******* INPUT INGREDIENTI ********@
+        <div class="mb-3">
+            <label for="SelectedIngredienti">PP</label>
+            <select asp-for="SelectedIngredienti" multiple asp-item="@Model.IngredientiList" class=" w-50">
+                @foreach(Ingrediente ing in Model.IngredientiList)
+                {                    
+                        <option value="@ing.Id" >@ing.Name</option>
+                }
+            </select>
+        </div>
+
         @******* INPUT SUBMIT********@
-        <div>
-           
+        <div>           
             <button class=" btn btn-success" type="submit">Crea</button>
         </div>
     </form>
-
+    <div>
+        <a class="btn btn-danger" href="@Url.Action("Index","Pizza")">Indietro</a>
+    </div>
 </div>
