@@ -46,7 +46,7 @@ namespace LaMiaPizzeria.Controllers
         }
 
         //************* POST CREATE VIEW ***************
-        [HttpPost]
+        [HttpPost]      
         [ValidateAntiForgeryToken]
         public IActionResult Create(PizzaCategories p)
         {
@@ -56,7 +56,7 @@ namespace LaMiaPizzeria.Controllers
                 {
                     p.CategoryList = db.CategoriaList.ToList();
 
-                    return View();
+                    return View(p);
                 }
 
                 db.PizzaList.Add(p.Pizza);
@@ -90,7 +90,7 @@ namespace LaMiaPizzeria.Controllers
                 if(pizza == null)
                 {
                     return NotFound();
-                }
+                }  
                 else
                 {
                     PizzaCategories model = new PizzaCategories();
