@@ -2,8 +2,7 @@
 using LaMiaPizzeria.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
-using System.Linq;
+
 
 namespace LaMiaPizzeria.Controllers
 {
@@ -48,7 +47,7 @@ namespace LaMiaPizzeria.Controllers
         //************* POST CREATE VIEW ***************
         [HttpPost]      
         [ValidateAntiForgeryToken]
-        public IActionResult Create(PizzaCategories p)
+        public IActionResult Create(Helper p)
         {
             using(PizzaContext db = new PizzaContext())
             {
@@ -72,7 +71,7 @@ namespace LaMiaPizzeria.Controllers
             using (PizzaContext db = new PizzaContext())
             {
                 List<Categoria> categories = db.CategoriaList.ToList();
-                PizzaCategories model = new PizzaCategories();
+                Helper model = new Helper();
 
                 model.CategoryList = categories;
                 model.Pizza = new Pizza();
@@ -93,7 +92,7 @@ namespace LaMiaPizzeria.Controllers
                 }  
                 else
                 {
-                    PizzaCategories model = new PizzaCategories();
+                    Helper model = new Helper();
 
                     model.Pizza = pizza;
                     model.CategoryList = db.CategoriaList.ToList();
@@ -106,7 +105,7 @@ namespace LaMiaPizzeria.Controllers
         //************* POST UPDATE VIEW ***************
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update(int id, PizzaCategories p)
+        public IActionResult Update(int id, Helper p)
         {            
             using(PizzaContext db = new PizzaContext())
             {

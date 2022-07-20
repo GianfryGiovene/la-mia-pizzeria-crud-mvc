@@ -8,41 +8,51 @@
     <div>
         <a class="btn btn-primary" href="@Url.Action("Create","Pizza")">Crea Pizza</a>
     </div>
-    <table  class="table table-hover">
-        <tr>
-            <th class="col-2">Immagine</th>
-            <th class="col-2">Nome</th>
-            <th class="col-2">Desscrizione</th>
-            <th class="col-2">Castegoria</th>
-            <th class="col-2">Prezzo</th>
-            <th class="col-2">Comandi</th>
-        </tr>
+    
 
-        @foreach(Pizza pizza in Model)
+        @if (Model.Count() > 0)
         {
-            <tr class="my-lg-2 ">
-                <td class="align-middle l"><img src="@pizza.PhotoUrl" class="w-100 rounded-circle border-5 border border-success"/></td>
-                <td class="align-middle">@pizza.Name</td>
-                <td class="align-middle">@pizza.Description</td>
-                @if (@pizza.Category != null)
+            <table  class="table table-hover">
+                <tr>
+                    <th class="col-2">Immagine</th>
+                    <th class="col-2">Nome</th>
+                    <th class="col-2">Desscrizione</th>
+                    <th class="col-2">Castegoria</th>
+                    <th class="col-2">Prezzo</th>
+                    <th class="col-2">Comandi</th>
+                </tr>
+                @foreach (Pizza pizza in Model)
                 {
-                    <td class="align-middle">@pizza.Category.Name</td>
+                    <tr class="my-lg-2 ">
+                        <td class="align-middle l"><img src="@pizza.PhotoUrl" class="w-100 rounded-circle border-5 border border-success"/></td>
+                        <td class="align-middle">@pizza.Name</td>
+                        <td class="align-middle">@pizza.Description</td>
+                        @if (@pizza.Category != null)
+                        {
+                            <td class="align-middle">@pizza.Category.Name</td>
+                        }
+                        else
+                        {
+                            <td class="align-middle">--</td>
+                        }
+                        <td class="align-middle">@pizza.Price euro</td>
+                        <td class="align-middle">
+                            <a class="btn btn-warning" href="@Url.Action("Details","Pizza",new { id = @pizza.Id})">Visualizza</a>
+                            <a class="btn btn-secondary" href="@Url.Action("Update","Pizza",new { id = @pizza.Id})">Modifica</a>
+                            <form asp-controller="Pizza" asp-action="Delete" asp-route-id="@pizza.Id" method="post">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-danger mt-2">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
                 }
-                else
-                {
-                    <td class="align-middle">--</td>
-                }
-                <td class="align-middle">@pizza.Price euro</td>
-                <td class="align-middle">
-                    <a class="btn btn-warning" href="@Url.Action("Details","Pizza",new { id = @pizza.Id})">Visualizza</a>
-                    <a class="btn btn-secondary" href="@Url.Action("Update","Pizza",new { id = @pizza.Id})">Modifica</a>
-                    <form asp-controller="Pizza" asp-action="Delete" asp-route-id="@pizza.Id" method="post">
-                        @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-danger mt-2">Delete</button>
-                    </form>
-                </td>
-             </tr>
+            </table>
         }
-    </table>
+        else
+        {
+            <div class="col-12 text-center">
+                <strong class="text-center ">Non ci sono pizze da visualizzare</strong>        
+            </div>
+        }
 </div>
 
