@@ -50,21 +50,47 @@ namespace LaMiaPizzeria.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Helper model)
         {
-            using(PizzaContext db = new PizzaContext())
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
+                using (PizzaContext db = new PizzaContext())
                 {
-                    model.CategoryList = db.CategoriaList.ToList();
-                    model.IngredientiList = db.IngredienteList.ToList();
+                    List<Categoria> categoryList = db.CategoriaList.ToList();
 
-                    return View(model);
+                    model.CategoryList = categoryList;
+                    model.IngredientiList = NewMethod();
+
+                    return View("Create", model);
                 }
 
-                db.PizzaList.Add(model.Pizza);
+            }
+            using (PizzaContext db = new PizzaContext())
+            {
+                Pizza newPizza = new Pizza();
+                newPizza.Name = model.Pizza.Name;
+                newPizza.Description = model.Pizza.Description;
+                newPizza.price = model.Pizza.Price;
+                newPizza.PhotoUrl = model.Pizza.PhotoUrl;
+                newPizza.CategoryId = model.Pizza.CategoryId;
+                newPizza.IngredienteList = new List<Ingrediente>();
+
+                if (model.SelectedIngredienti != null)
+                {
+                    foreach (string ingredient in model.SelectedIngredienti)
+                    {
+                        int selectedIntTagId = Int32.Parse(ingredient);
+
+                        Ingrediente ingrediente = db.IngredienteList.Where(p => p.Id == selectedIntTagId).FirstOrDefault();
+
+                        newPizza.IngredienteList.Add(ingrediente);
+                    }
+                }
+                db.PizzaList.Add(newPizza);
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
-            }            
-        }
+            }
+
+        }         
 
         //************* GET CREATE VIEW ***************
         [HttpGet]
@@ -73,23 +99,15 @@ namespace LaMiaPizzeria.Controllers
             using (PizzaContext db = new PizzaContext())
             {
                 List<Categoria> categories = db.CategoriaList.ToList();
-                List<Ingrediente> ingredientiList = db.IngredienteList.ToList();
                 Helper model = new Helper();
 
+                model.Pizza = new Pizza();
                 model.CategoryList = categories;
 
-                model.Pizza = new Pizza();
+                model.IngredientiList = NewMethod();
 
-                List<Ingrediente> modelList = new List<Ingrediente>();
-                
-                foreach(Ingrediente ingrediente in ingredientiList)
-                {
-                    modelList.Add(new Ingrediente(ingrediente.Name, ingrediente.Id));
-                }
 
-                model.IngredientiList = modelList;
-                
-                return View(model);
+                return View("Create",model);
             }
         }
 
@@ -169,5 +187,21 @@ namespace LaMiaPizzeria.Controllers
             }
             
         }
+        static List<SelectListItem> NewMethod()
+        {
+            using (PizzaContext db = new PizzaContext())
+            {
+                List<SelectListItem> ingredientsList = new List<SelectListItem>();
+                List<Ingrediente> ingredients = db.IngredienteList.ToList();
+
+                foreach (Ingrediente ingredient in ingredients)
+                {
+                    ingredientsList.Add(new SelectListItem() { Text = ingredient.Name, Value = ingredient.Id.ToString() });
+                }
+
+                return ingredientsList;
+            }
+        }
+
     }
 }

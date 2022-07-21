@@ -57,23 +57,23 @@ namespace LaMiaPizzeria.Models
 
         }
 
-        public void SetIngredienti(Ingrediente ingrediente1, Ingrediente ingrediente2, Ingrediente ingrediente3)
-        {
-            IngredienteList.Add(ingrediente1);
-            IngredienteList.Add(ingrediente2);
-            IngredienteList.Add(ingrediente3);
-        }
+        //public void SetIngredienti(Ingrediente ingrediente1, Ingrediente ingrediente2, Ingrediente ingrediente3)
+        //{
+        //    IngredienteList.Add(ingrediente1);
+        //    IngredienteList.Add(ingrediente2);
+        //    IngredienteList.Add(ingrediente3);
+        //}
 
-        public void SetIngredienti(Ingrediente ingrediente1, Ingrediente ingrediente2)
-        {
-            IngredienteList.Add(ingrediente1);
-            IngredienteList.Add(ingrediente2);
-        }
+        //public void SetIngredienti(Ingrediente ingrediente1, Ingrediente ingrediente2)
+        //{
+        //    IngredienteList.Add(ingrediente1);
+        //    IngredienteList.Add(ingrediente2);
+        //}
 
-        public void SetIngredienti(Ingrediente ingrediente1)
-        {
-            IngredienteList.Add(ingrediente1);
-        }
+        //public void SetIngredienti(Ingrediente ingrediente1)
+        //{
+        //    IngredienteList.Add(ingrediente1);
+        //}
 
     }
 }

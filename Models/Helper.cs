@@ -7,7 +7,8 @@ namespace LaMiaPizzeria.Models
     {
         public Pizza Pizza { set; get; }
         public List<Categoria>? CategoryList { get; set; }
-        public List<Ingrediente>? IngredientiList { get; set; }
+
+        public List<SelectListItem>? IngredientiList { get; set; }
         public List<string>? SelectedIngredienti { get; set; }       
     }  
 }
