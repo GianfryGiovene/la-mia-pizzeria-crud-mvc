@@ -52,9 +52,19 @@
                         <option value="@category.Id">@category.Name</option>
                     }
                 }
-            </select>                        
-            
+            </select>
         </div>
+
+        @******* INPUT INGREDIENTI ********@
+        <div class="mb-3">
+            <strong>Ingredienti:</strong>
+            <select asp-for="SelectedIngredienti" 
+                    asp-items="@Model.IngredientiList" 
+                    multiple 
+                    class="form-control mb-2">
+            </select>
+        </div>
+
         @******* INPUT SUBMIT ********@
         <div>
            

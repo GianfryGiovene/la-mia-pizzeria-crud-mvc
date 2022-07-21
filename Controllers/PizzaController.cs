@@ -45,6 +45,23 @@ namespace LaMiaPizzeria.Controllers
 
         }
 
+        //************* GET CREATE VIEW ***************
+        [HttpGet]
+        public IActionResult Create()
+        {
+            using (PizzaContext db = new PizzaContext())
+            {
+                List<Categoria> categories = db.CategoriaList.ToList();
+                Helper model = new Helper();
+
+                model.Pizza = new Pizza();
+                model.CategoryList = categories;
+                model.IngredientiList = NewMethod();
+
+                return View("Create", model);
+            }
+        }
+
         //************* POST CREATE VIEW ***************
         [HttpPost]      
         [ValidateAntiForgeryToken]
@@ -90,26 +107,7 @@ namespace LaMiaPizzeria.Controllers
                 return RedirectToAction("Index");
             }
 
-        }         
-
-        //************* GET CREATE VIEW ***************
-        [HttpGet]
-        public IActionResult Create()
-        {
-            using (PizzaContext db = new PizzaContext())
-            {
-                List<Categoria> categories = db.CategoriaList.ToList();
-                Helper model = new Helper();
-
-                model.Pizza = new Pizza();
-                model.CategoryList = categories;
-
-                model.IngredientiList = NewMethod();
-
-
-                return View("Create",model);
-            }
-        }
+        } 
 
         //************* GET UPDATE VIEW ***************
         [HttpGet]
@@ -117,17 +115,26 @@ namespace LaMiaPizzeria.Controllers
         {
             using(PizzaContext db = new PizzaContext())
             {
-                Pizza pizza = db.PizzaList.Where(p => p.Id == id).FirstOrDefault();
-                if(pizza == null)
+                Pizza editPizza = db.PizzaList.Where(p => p.Id == id).Include(p =>p.Category).Include(p=>p.IngredienteList).FirstOrDefault();
+                if(editPizza == null)
                 {
                     return NotFound();
                 }  
                 else
                 {
+
                     Helper model = new Helper();
 
-                    model.Pizza = pizza;
+                    model.Pizza = editPizza;
                     model.CategoryList = db.CategoriaList.ToList();
+                    model.SelectedIngredienti = new List<string>();
+
+                    foreach(Ingrediente ing in editPizza.IngredienteList)
+                    {
+                        model.SelectedIngredienti.Add(ing.Id.ToString());
+                    }
+                    
+                    model.IngredientiList = NewMethod();
 
                     return View(model);
                 }
@@ -137,34 +144,56 @@ namespace LaMiaPizzeria.Controllers
         //************* POST UPDATE VIEW ***************
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update(int id, Helper p)
-        {            
-            using(PizzaContext db = new PizzaContext())
+        public IActionResult Update(int id, Helper model)
+        {
+
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
+                using (PizzaContext db = new PizzaContext())
                 {
-                    p.CategoryList = db.CategoriaList.ToList();
-                    return View(p);
+                    List<Categoria> categoryList = db.CategoriaList.ToList();
+
+                    model.CategoryList = categoryList;
+                    model.IngredientiList = NewMethod();
+
+                    return View("Create", model);
                 }
 
-                Pizza editPizza = db.PizzaList.Where(p => p.Id == id).FirstOrDefault();
+            }
+            using (PizzaContext db = new PizzaContext())
+            {
+                Pizza editPizza = db.PizzaList.Where(pizza => pizza.Id == id).Include(p=>p.IngredienteList).FirstOrDefault();
+                if(editPizza != null)
+                {
+                    editPizza.Name = model.Pizza.Name;
+                    editPizza.Description = model.Pizza.Description;
+                    editPizza.price = model.Pizza.Price;
+                    editPizza.PhotoUrl = model.Pizza.PhotoUrl;
+                    editPizza.CategoryId = model.Pizza.CategoryId;
 
-                if(editPizza == null)
+                    editPizza.IngredienteList.Clear();
+
+                    if (model.SelectedIngredienti != null)
+                    {
+                        foreach (string ingredient in model.SelectedIngredienti)
+                        {
+                            int selectedIntTagId = Int32.Parse(ingredient);
+
+                            Ingrediente ingrediente = db.IngredienteList.Where(p => p.Id == selectedIntTagId).FirstOrDefault();
+
+                            editPizza.IngredienteList.Add(ingrediente);
+                        }
+                    }
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else
                 {
                     return NotFound();
                 }
-
-                editPizza.Name = p.Pizza.Name;
-                editPizza.Description = p.Pizza.Description;
-                editPizza.Price = p.Pizza.Price;
-                editPizza.PhotoUrl = p.Pizza.PhotoUrl;
-                editPizza.CategoryId = p.Pizza.CategoryId;
-
-                db.SaveChanges();
-
-                return RedirectToAction("Index");
-            }
+            }            
         }
+
         //************* DELETE VIEW ***************
         [HttpPost]
         [ValidateAntiForgeryToken]
