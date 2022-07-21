@@ -24,7 +24,7 @@ namespace LaMiaPizzeria.Models
         [NegativePriceValidationAttribute]
         public double price;
 
-        public int? CategoryId { get; set; }
+        public int CategoryId { get; set; }
         public Categoria? Category { set; get;  }
 
 
@@ -44,36 +44,29 @@ namespace LaMiaPizzeria.Models
             }
         }
         
-        public Pizza(string name, string description, string photoUrl, double price)
+        public Pizza(string name, string description, string photoUrl, double price, int categoryId, List<Ingrediente> ingredientsList)
         {
-            Name = name;
-            Description = description;
-            PhotoUrl = photoUrl;
-            price = price;
+            this.Name = name;
+            this.Description = description;
+            this.PhotoUrl = photoUrl;
+            this.Price = price;
+            this.CategoryId = categoryId;
+            this.IngredienteList = ingredientsList;
+        }
+
+        public void EditPizza(string name, string description, string photoUrl, double price, int categoryId)
+        {
+            this.Name = name;
+            this.Description = description;
+            this.PhotoUrl = photoUrl;
+            this.Price = price;
+            this.CategoryId = categoryId;
+            
         }
 
         public Pizza()
         {
 
         }
-
-        //public void SetIngredienti(Ingrediente ingrediente1, Ingrediente ingrediente2, Ingrediente ingrediente3)
-        //{
-        //    IngredienteList.Add(ingrediente1);
-        //    IngredienteList.Add(ingrediente2);
-        //    IngredienteList.Add(ingrediente3);
-        //}
-
-        //public void SetIngredienti(Ingrediente ingrediente1, Ingrediente ingrediente2)
-        //{
-        //    IngredienteList.Add(ingrediente1);
-        //    IngredienteList.Add(ingrediente2);
-        //}
-
-        //public void SetIngredienti(Ingrediente ingrediente1)
-        //{
-        //    IngredienteList.Add(ingrediente1);
-        //}
-
     }
 }

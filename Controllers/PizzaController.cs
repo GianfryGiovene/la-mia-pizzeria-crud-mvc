@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace LaMiaPizzeria.Controllers
 {
     public class PizzaController : Controller
@@ -56,7 +55,7 @@ namespace LaMiaPizzeria.Controllers
 
                 model.Pizza = new Pizza();
                 model.CategoryList = categories;
-                model.IngredientiList = NewMethod();
+                model.IngredientiList = GetIngredientsList();
 
                 return View("Create", model);
             }
@@ -74,7 +73,7 @@ namespace LaMiaPizzeria.Controllers
                     List<Categoria> categoryList = db.CategoriaList.ToList();
 
                     model.CategoryList = categoryList;
-                    model.IngredientiList = NewMethod();
+                    model.IngredientiList = GetIngredientsList();
 
                     return View("Create", model);
                 }
@@ -82,14 +81,8 @@ namespace LaMiaPizzeria.Controllers
             }
             using (PizzaContext db = new PizzaContext())
             {
-                Pizza newPizza = new Pizza();
-                newPizza.Name = model.Pizza.Name;
-                newPizza.Description = model.Pizza.Description;
-                newPizza.price = model.Pizza.Price;
-                newPizza.PhotoUrl = model.Pizza.PhotoUrl;
-                newPizza.CategoryId = model.Pizza.CategoryId;
-                newPizza.IngredienteList = new List<Ingrediente>();
-
+                Pizza newPizza = new Pizza(model.Pizza.Name, model.Pizza.Description, model.Pizza.PhotoUrl, model.Pizza.Price, model.Pizza.CategoryId, new List<Ingrediente>());
+                
                 if (model.SelectedIngredienti != null)
                 {
                     foreach (string ingredient in model.SelectedIngredienti)
@@ -134,7 +127,7 @@ namespace LaMiaPizzeria.Controllers
                         model.SelectedIngredienti.Add(ing.Id.ToString());
                     }
                     
-                    model.IngredientiList = NewMethod();
+                    model.IngredientiList = GetIngredientsList();
 
                     return View(model);
                 }
@@ -154,7 +147,7 @@ namespace LaMiaPizzeria.Controllers
                     List<Categoria> categoryList = db.CategoriaList.ToList();
 
                     model.CategoryList = categoryList;
-                    model.IngredientiList = NewMethod();
+                    model.IngredientiList = GetIngredientsList();
 
                     return View("Create", model);
                 }
@@ -165,11 +158,7 @@ namespace LaMiaPizzeria.Controllers
                 Pizza editPizza = db.PizzaList.Where(pizza => pizza.Id == id).Include(p=>p.IngredienteList).FirstOrDefault();
                 if(editPizza != null)
                 {
-                    editPizza.Name = model.Pizza.Name;
-                    editPizza.Description = model.Pizza.Description;
-                    editPizza.price = model.Pizza.Price;
-                    editPizza.PhotoUrl = model.Pizza.PhotoUrl;
-                    editPizza.CategoryId = model.Pizza.CategoryId;
+                    editPizza.EditPizza(model.Pizza.Name, model.Pizza.Description, model.Pizza.PhotoUrl, model.Pizza.Price, model.Pizza.CategoryId);
 
                     editPizza.IngredienteList.Clear();
 
@@ -216,7 +205,10 @@ namespace LaMiaPizzeria.Controllers
             }
             
         }
-        static List<SelectListItem> NewMethod()
+
+
+
+        static List<SelectListItem> GetIngredientsList()
         {
             using (PizzaContext db = new PizzaContext())
             {

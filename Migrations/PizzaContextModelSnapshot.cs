@@ -34,7 +34,7 @@ namespace LaMiaPizzeria.Migrations
 
                     b.HasIndex("PizzaListId");
 
-                    b.ToTable("IngredientePizza");
+                    b.ToTable("IngredientePizza", (string)null);
                 });
 
             modelBuilder.Entity("LaMiaPizzeria.Models.Categoria", b =>
@@ -51,7 +51,7 @@ namespace LaMiaPizzeria.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CategoriaList");
+                    b.ToTable("CategoriaList", (string)null);
                 });
 
             modelBuilder.Entity("LaMiaPizzeria.Models.Ingrediente", b =>
@@ -68,7 +68,7 @@ namespace LaMiaPizzeria.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("IngredienteList");
+                    b.ToTable("IngredienteList", (string)null);
                 });
 
             modelBuilder.Entity("LaMiaPizzeria.Models.Pizza", b =>
@@ -101,7 +101,7 @@ namespace LaMiaPizzeria.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("PizzaList");
+                    b.ToTable("PizzaList", (string)null);
                 });
 
             modelBuilder.Entity("IngredientePizza", b =>
